@@ -43,7 +43,7 @@ Design/implementation notes under [`BatterySolarMonitorUpdate/docs/`](BatterySol
 
 ## Adapting this to your own site
 
-See **"Modifying this Project for Your Site"** in [`index.html`](https://www.forward.com.au/pfod/pfodWeb/index.html#modify) for the
+See **"Modifying this Project for Your Site"** in the [`projects's index.html`](https://www.forward.com.au/pfod/HomeAutomation/SolarBattery_EV_HW/index.html#modify) for the
 full walkthrough (site settings, removing controls you don't have, wiring up your
 own data sources, regenerating the shading model, and editing the display menu via
 pfodWeb's Designer) — the short version is: update `BatterySolarMonitorUpdate/site_settings.csv`,
@@ -52,6 +52,6 @@ details and let it do the rest, one step at a time.
 
 ---
 
-[`index.html`](https://www.forward.com.au/pfod/pfodWeb/index.html) is the full project write-up (parts list, construction,
+[`The project's index.html`](https://www.forward.com.au/pfod/HomeAutomation/SolarBattery_EV_HW/index.html#modify) is the full project write-up (parts list, construction,
 detailed behaviour, Project Aims). pfodDevice™ and pfodApp™ are trademarks of
 Forward Computing and Control Pty. Ltd.
