@@ -43,7 +43,7 @@ Design/implementation notes under [`BatterySolarMonitorUpdate/docs/`](BatterySol
 
 ## Adapting this to your own site
 
-See **"Modifying this Project for Your Site"** in [`index.html`](https://www.forward.com.au/pfod/pfodWeb/index.html) for the
+See **"Modifying this Project for Your Site"** in [`index.html`](https://www.forward.com.au/pfod/pfodWeb/index.html#modify) for the
 full walkthrough (site settings, removing controls you don't have, wiring up your
 own data sources, regenerating the shading model, and editing the display menu via
 pfodWeb's Designer) — the short version is: update `BatterySolarMonitorUpdate/site_settings.csv`,
