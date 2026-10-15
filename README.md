@@ -52,6 +52,6 @@ details and let it do the rest, one step at a time.
 
 ---
 
-[`The project's index.html`](https://www.forward.com.au/pfod/HomeAutomation/SolarBattery_EV_HW/index.html#modify) is the full project write-up (parts list, construction,
+[`The project's index.html`](https://www.forward.com.au/pfod/HomeAutomation/SolarBattery_EV_HW/index.html) is the full project write-up (parts list, construction,
 detailed behaviour, Project Aims). pfodDevice™ and pfodApp™ are trademarks of
 Forward Computing and Control Pty. Ltd.
