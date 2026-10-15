@@ -1,0 +1,178 @@
+=== auth/enphase_token.py  2026-09-28T17:09:41 ===
+Logging into Enlighten...
+Captured _enlighten_4_session cookie.
+Session saved to C:\ai\aicode\pfodParser\_session.csv
+Session: 74a0fd3b...1a60ae36
+Length: 32 chars
+--- auth/enphase_token.py: OK ---
+
+=== fetch_solar_history.py  2026-09-28T17:09:44 ===
+Existing solar_history.csv: last date 2026-09-27
+solar_history.csv is already up to date.
+--- fetch_solar_history.py: OK ---
+
+=== fetch_enlighten_daily.py  2026-09-28T17:09:45 ===
+Existing enphase_daily.csv: 1207 days (2023-06-09 to 2026-09-27)
+Fetching production and consumption from Enlighten ...
+  energy_lifetime: 1208 days from 2023-06-09
+  consumption_lifetime: 1208 days from 2023-06-09
+  production:  skipping - already up to date
+  consumption: skipping - already up to date
+--- fetch_enlighten_daily.py: OK ---
+
+=== fetch_consumption_15min.py  2026-09-28T17:09:49 ===
+Loaded 391 stored consumption days  (2025-09-01 to 2026-09-27)
+Fetching 1 new day(s) + 0 solar-only day(s) ...
+  2026-07-06: consumption timeseries unexpected length (92) (not the actual DST transition date -- treating as a data gap) -- skipping
+Nothing fetched -- no changes saved.
+--- fetch_consumption_15min.py: OK ---
+
+=== solar_shading_model.py  2026-09-28T17:09:53 ===
+Loading data and computing solar positions...
+  4708 hourly actual rows from solar_15min_history.csv
+  1207 Enphase days, 16195 OM daylight hours
+
+Solving for shade factors (NNLS regression)...
+  214 sun-position bins
+  1207 overlapping days
+  1204 valid days after filtering
+  Added 4302 hourly actual rows (391 days)
+  Recency weighting: half-life=3.0y, oldest row weight=0.47, newest=1.00
+
+  NNLS fit (daily totals, n=1204): RMSE=5.30, MAE=3.90, R2=0.851
+  Naive (0.80): RMSE=6.25
+
+Smoothing shade factors (spatial neighbourhood average)...
+Smoothing shade factors (sun-path dip removal)...
+  Sun-path smoothing converged after 5 passes
+
+Applying tree shadow correction (WNW, geometry from autumn data)...
+  Tree shadow: 31 bins corrected (az 280-319deg, el < 50deg)
+
+Applying east tree shadow correction (provisional, season-pooled)...
+  East tree shadow (provisional): 17 bins corrected (az 80-139deg, el < 30deg)
+
+Applying empirical (az,el) shade overrides...
+    az=340, el=30: 0.815 -> 0.440
+    az=320, el=25: 0.726 -> 0.310
+    az=320, el=30: 0.860 -> 0.240
+    az=320, el=35: 0.864 -> 0.300
+    az=330, el=35: 0.893 -> 0.610
+    az=330, el=40: 0.870 -> 0.750
+    az=330, el=45: 0.862 -> 0.800
+    az=340, el=35: 0.909 -> 0.610
+    az=350, el=30: 0.929 -> 0.810
+    az=350, el=35: 0.905 -> 0.890
+    az=350, el=40: 0.927 -> 0.850
+    az=350, el=50: 0.942 -> 0.750
+    az= 10, el=30: 1.043 -> 0.970
+    az= 20, el=45: 0.959 -> 0.820
+    az= 30, el=25: 1.068 -> 1.200
+    az= 30, el=30: 1.047 -> 1.050
+    az= 30, el=35: 1.041 -> 1.020
+    az= 40, el=15: 1.016 -> 1.350
+    az= 40, el=25: 1.040 -> 1.090
+    az= 40, el=40: 0.997 -> 0.990
+    az= 50, el=15: 0.977 -> 1.250
+    az= 50, el=30: 1.020 -> 1.030
+    az= 60, el=15: 0.996 -> 0.870
+    az= 60, el=20: 0.901 -> 1.080
+    az= 70, el= 5: 0.860 -> 1.650
+    az= 80, el=20: 0.429 -> 0.700
+    az= 90, el=25: 0.497 -> 0.770
+    az= 90, el=30: 0.908 -> 0.990
+    az=100, el= 5: 0.225 -> 1.520
+    az=100, el=10: 0.293 -> 0.580
+    az=100, el=15: 0.361 -> 0.540
+    az=100, el=25: 0.497 -> 0.830
+  Observed-shade overrides: 32 bins replaced
+
+Exporting shade grid for SD-card / microcontroller use...
+  Wrote 214 (az_bin, el_bin) rows to shade_grid.csv
+
+  Energy-weighted mean shade factor: 0.840
+
+  Most shaded positions:
+    Az 280deg, El  5deg: shade=0.081 (91 kWh)
+    Az 300deg, El  5deg: shade=0.081 (131 kWh)
+    Az 280deg, El  0deg: shade=0.100 (21 kWh)
+    Az 290deg, El  0deg: shade=0.100 (35 kWh)
+    Az 280deg, El 25deg: shade=0.130 (131 kWh)
+
+  Clearest positions:
+    Az  70deg, El  5deg: shade=1.650 (101 kWh)
+    Az 100deg, El  5deg: shade=1.520 (30 kWh)
+    Az  40deg, El 15deg: shade=1.350 (439 kWh)
+    Az  50deg, El 15deg: shade=1.250 (122 kWh)
+    Az  30deg, El 25deg: shade=1.200 (635 kWh)
+
+Building empirical morning-floor table...
+  Wrote 150 (month, hour) entries to morning_floor.csv
+
+Applying shading model to full hourly dataset...
+  Written 32785 rows to C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\data\calibrated_solar_hourly_v2.csv
+
+Generating charts...
+  solar_shading_model.png
+
+Writing report...
+  Report: C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\docs\solar_shading_stats.md
+
+Done!
+--- solar_shading_model.py: OK ---
+
+Copied C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\data\shade_grid.csv -> C:\ai\aicode\pfodParser\shade_grid.csv
+Copied C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\data\morning_floor.csv -> C:\ai\aicode\pfodParser\morning_floor.csv
+=== plot_gti_vs_model.py --days 7 2026-09-28T17:10:05 ===
+Plotting GTI vs model: 2026-09-21 to 2026-09-27
+  168 hourly rows loaded
+  Saved: C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\docs\charts\gti_vs_model.png
+--- plot_gti_vs_model.py: OK ---
+
+=== analyse_tree_shadow.py  2026-09-28T17:10:08 ===
+Analysing tree shadow calibration (WNW zone)...
+  724 qualifying hourly observations in current dataset
+  795 total rows in data/tree_shadow_calibration.csv
+  Updated: C:\ai\aicode\pfodParser\BatterySolarMonitorUpdate\data\tree_shadow_calibration.csv
+
+Tree shadow calibration summary (WNW zone, az 280-319deg, el < 50deg):
+  Total observations: 795
+  Date range: 2025-09-01 to 2026-09-27
+
+el_bin     n  mean_el  mean_implied   median     min     max  model_sf     gap
+  ------------------------------------------------------------------------------
+     0    61      2.4         0.010    0.009   0.000   0.037     0.100  -0.090
+     5   104      8.0         0.085    0.050   0.003   0.694     0.097  -0.011
+    10    66     12.1         0.115    0.078   0.028   0.472     0.140  -0.025
+    15   113     18.2         0.206    0.167   0.065   0.647     0.190  +0.016
+    20   111     22.1         0.194    0.148   0.068   0.738     0.240  -0.046
+    25    65     27.6         0.235    0.162   0.092   0.735     0.130  +0.105
+    30    70     32.3         0.296    0.261   0.022   0.960     0.360  -0.064
+    35    68     37.9         0.412    0.351   0.117   1.948     0.397  +0.015
+    40    78     42.4         0.508    0.458   0.181   1.368     0.550  -0.042
+    45    59     47.4         0.641    0.686   0.010   1.432     0.500  +0.141
+
+  gap = mean_implied - model_sf.  |gap| > 0.15 flagged with **
+  Update _TREE_SF_PROFILE in solar_shading_model.py when n >= 5 and gap is large.
+
+  No changes needed to _TREE_AZ_BINS, _TREE_SF_PROFILE or _TREE_EL_ONSET.
+--- analyse_tree_shadow.py: OK ---
+
+Review the printed gap table above -- if it suggests changes, they are NOT applied automatically (same as the fetch/refit steps do apply themselves): edit _TREE_SF_PROFILE/_TREE_EL_ONSET in solar_shading_model.py by hand and re-run.
+
+=== Summary ===
+  [OK] log into Enlighten, save session
+  [OK] fetch_solar_history.py
+  [OK] fetch_enlighten_daily.py
+  [OK] fetch_consumption_15min.py
+  [OK] solar_shading_model.py (refit)
+  [OK] copy shade_grid.csv to PRIVATE_DIR
+  [OK] copy morning_floor.csv to PRIVATE_DIR
+  [OK] plot_gti_vs_model.py (gti_vs_model.png, last 7 days)
+  [OK] analyse_tree_shadow.py (WNW profile check)
+
+All steps succeeded. Review docs/solar_shading_stats.md and the override-table diff lines above before syncing + flashing the ESP32 -- see docs/quarterly_update_process.md.
+Deleted C:\ai\aicode\pfodParser\_session.csv (disposable -- regenerated fresh next run).
+
+
+MANUAL STEP REQUIRED: copy C:\ai\aicode\pfodParser\site_settings.csv, C:\ai\aicode\pfodParser\shade_grid.csv and C:\ai\aicode\pfodParser\morning_floor.csv into BatterySolarMonitor/data/ by hand before the next firmware+data upload -- this pipeline never writes to BatterySolarMonitor/data/ itself.

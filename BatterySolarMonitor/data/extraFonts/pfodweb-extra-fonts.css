@@ -1,0 +1,92 @@
+/*
+   pfodweb-extra-fonts.css
+ * (c)2026 Forward Computing and Control Pty. Ltd.
+ * NSW Australia, www.forward.com.au
+ * This code is not warranted to be fit for any purpose. You may only use it at your own risk.
+ * This generated code may be freely used for both private and commercial use
+ * provided this copyright is maintained.
+ *
+ * Optional, external Roboto font subsets — Cyrillic, Cyrillic Extended,
+ * Greek, Greek Extended.  Loaded by pfodWeb.html via a plain
+ * <link> tag (not inlined/embedded), so the browser fetches each woff2
+ * file only when a character within its unicode-range actually appears in
+ * rendered page text (font-display: swap + lazy fetch on first use).
+ *
+ * This file — and the woff2 files it references — lives next to
+ * pfodWeb.html and pfodProxy.exe (or pfodProxy reads it from beside its own
+ * binary).  Both are entirely optional: if this file or a referenced
+ * woff2 is missing, the page still works fine, just without that script's
+ * glyphs (browser falls back to Arial / the OS system font).
+ *
+ * To add support for another script (e.g. Thai), drop in a woff2 file and
+ * an @font-face rule following the same pattern below — no rebuild of
+ * pfodWeb.html is ever required.  Note Roboto itself has no Thai glyphs,
+ * so a Thai addition would reference a different actual font family
+ * (e.g. "Noto Sans Thai") while still labelling font-family: 'Roboto' so
+ * the existing font stacks pick it up automatically via unicode-range.
+ */
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Normal-Cyrillic.woff2') format('woff2');
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Normal-CyrillicExt.woff2') format('woff2');
+    unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Normal-Greek.woff2') format('woff2');
+    unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Normal-GreekExt.woff2') format('woff2');
+    unicode-range: U+1F00-1FFF;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Italic-Cyrillic.woff2') format('woff2');
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Italic-CyrillicExt.woff2') format('woff2');
+    unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Italic-Greek.woff2') format('woff2');
+    unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('Roboto-Italic-GreekExt.woff2') format('woff2');
+    unicode-range: U+1F00-1FFF;
+}

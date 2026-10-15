@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfodWeb extraFonts Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            color: #222;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #1a5ca8;
+            border-bottom: 3px solid #1a5ca8;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1a5ca8;
+            margin-top: 40px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 6px;
+        }
+        h3 {
+            color: #333;
+            margin-top: 24px;
+        }
+        .note {
+            background: #fffbe6;
+            border-left: 4px solid #f0ad00;
+            padding: 10px 16px;
+            margin: 14px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .tip {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px 16px;
+            margin: 14px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 14px 0;
+        }
+        th {
+            background: #1a5ca8;
+            color: white;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+        }
+        tr:nth-child(even) td {
+            background: #f5f8ff;
+        }
+        code, pre {
+            background: #f0f0f0;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        code {
+            padding: 2px 6px;
+        }
+        pre {
+            padding: 12px 14px;
+            overflow-x: auto;
+        }
+        ol li, ul li {
+            margin-bottom: 6px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>pfodWeb — extraFonts Guide</h1>
+<p>Providing font files maintains uniformity of the menus across varying browsers and operating systems. The standard pfodWeb build
+embeds Roboto's <strong>Latin</strong> and <strong>Latin Extended</strong> fonts. Extra off-line locally loaded fonts can be added to the <code>extraFonts</code>
+directory without needing to recompile pfodWeb.</p>
+<p>This document describes how to add other fonts without having to rebuild <code>pfodWeb.html</code>.</p>
+
+<!-- ============================================================ -->
+<section>
+<h2>1. Why extraFonts/ exists</h2>
+
+<p>Having a consistent set of fonts give consistent displays of menus and drawings on different platforms, Android, iPhone, Windows, MacOS, linux. 
+<code>pfodWeb.html</code> embeds (Android's) Roboto's <strong>Latin</strong> and <strong>Latin Extended</strong>
+subsets directly as base64 <code>data:</code>, because almost every pfodWeb screen needs them and
+they're always wanted as soon as the page loads. References to every other font needed
+(Cyrillic, Greek, etc.) are moved out into a separate, plain CSS file —
+<code>extraFonts/pfodweb-extra-fonts.css</code> — referenced via an ordinary
+<code>&lt;link rel="stylesheet href="extraFonts/pfodweb-extra-fonts.css"&gt;</code> tag rather than inlined.</p>
+
+<p>This split matters for two reasons:</p>
+<ul>
+    <li><strong>Page weight.</strong> Inlining every script as base64 into <code>pfodWeb.html</code> would
+    permanently add hundreds of KB to the pfodWeb.html file that's loaded on every page load, for scripts most
+    devices never display.</li>
+    <li><strong>On-demand local load.</strong> Each <code>@font-face</code> rule in
+    <code>pfodweb-extra-fonts.css</code> declares a <code>unicode-range</code>. The browser only loads the locally hosted
+    woff2 file the first time a character inside that range actually needs to be painted. A sketch
+    that never sends Cyrillic text never triggers a load of the Cyrillic woff2 files at all.</li>
+</ul>
+</section>
+
+
+<!-- ============================================================ -->
+<section>
+<h2>2. Adding a new script/font to pfodWeb</h2>
+<p><code>extraFonts/</code> sits next to <code>pfodWeb.html</code> and <code>pfodProxy.exe</code> in every
+build output (Windows, Linux, and the <code>Contents/MacOS</code> folder of the macOS .app) — not embedded inside
+<code>pfodWeb.html</code>
+<ol>
+<li>Get a woff2 file covering the script. If Roboto itself has glyphs for it, download it from
+Google Fonts for that subset. If Roboto has <em>no</em> glyphs for the script (e.g. Thai), use a
+different actual font family (e.g. Noto Sans Thai) — that's fine, since step 3 still labels it
+<code>font-family: 'Roboto'</code> so pfodWeb's existing font stacks pick it up automatically.</li>
+<li>Drop the woff2 file(s) into pfodWeb's directory <code>extraFonts/</code>.</li>
+<li>Add an <code>@font-face</code> rule to <code>pfodweb-extra-fonts.css</code> following the existing
+pattern — same <code>font-family: 'Roboto'</code>, correct <code>unicode-range</code>, and a normal +
+italic pair if both are available. The filename itself is just a local reference you choose; it
+doesn't need to follow the <code>Roboto-&lt;Style&gt;-&lt;Subset&gt;</code> convention used by the real
+Roboto subsets — name it after whatever font you actually sourced the woff2 from, since it's the
+<code>font-family: 'Roboto'</code> label (not the filename) that makes pfodWeb's font stacks pick it up:
+<pre>@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('NotoSansThai-Normal.woff2') format('woff2');
+    unicode-range: U+0E01-0E5B;
+}</pre>
+</li>
+<li>Clear the browser cache and restart pfodWeb / pfodProxy </li>
+</ol>
+
+</section>
+
+<!-- ============================================================ -->
+<section>
+<h2>3. Current subset coverage</h2>
+
+<p>Four extra scripts are currently included in the <code>/extraFonts</code> directory,
+each as a separate woff2 per style (normal/italic).<br>
+If you don't need these fonts you can just delete the <code>/extraFonts</code> directory</p>
+
+<table>
+<tr><th>Subset</th><th>Files</th><th>unicode-range covers</th></tr>
+<tr><td>Cyrillic</td><td><code>Roboto-Normal-Cyrillic.woff2</code>, <code>Roboto-Italic-Cyrillic.woff2</code></td>
+<td>Russian and related Cyrillic-script languages</td></tr>
+<tr><td>Cyrillic Extended</td><td><code>Roboto-Normal-CyrillicExt.woff2</code>, <code>Roboto-Italic-CyrillicExt.woff2</code></td>
+<td>Additional Cyrillic letters used by some minority languages</td></tr>
+<tr><td>Greek</td><td><code>Roboto-Normal-Greek.woff2</code>, <code>Roboto-Italic-Greek.woff2</code></td>
+<td>Modern Greek</td></tr>
+<tr><td>Greek Extended</td><td><code>Roboto-Normal-GreekExt.woff2</code>, <code>Roboto-Italic-GreekExt.woff2</code></td>
+<td>Polytonic Greek (accented historical text)</td></tr>
+</table>
+</section>
+
+<!-- ============================================================ -->
+<section>
+<h2>4. How it's wired up</h2>
+
+<p><code>pfodWeb.html</code> attempts to load the locally hosted <code>extraFonts/pfodweb-extra-fonts.css</code> stylesheet.<br>
+The <code>extraFonts/pfodweb-extra-fonts.css</code> and fonts are entirely optional. If the .css or one of its
+woff2 files is missing, the local load attempt returns 404 not found, and the pfodWeb continues to work just fine — text
+in that script falls back to Arial / the OS system font instead of Roboto. Nothing in pfodWeb depends on
+this local directory being present.
+
+<p>Every rule inside that file uses <code>font-family: 'Roboto'</code> — the <em>same</em> family name
+used everywhere else in pfodWeb. Because each rule's <code>unicode-range</code> only covers its own
+script, the browser layers all of them (the two inlined Latin/LatinExt faces plus whichever extraFonts
+faces are present) into one logical "Roboto" that automatically picks the right face per character. No
+JS or font-stack changes are needed elsewhere in pfodWeb to support a new script — once a matching
+<code>@font-face</code> rule exists in <code>extraFonts/pfodweb-extra-fonts.css</code>,
+any text containing those characters just renders correctly.</p>
+
+<p>Both <code>font-weight: 100 900</code> (a variable-font weight range covering normal <em>and</em>
+bold in one file) and <code>normal</code>/<code>italic</code> styles are declared per subset, mirroring
+the four faces already inlined in <code>pfodCommon.css</code>.</p>
+
+</section>
+
+<!-- ============================================================ -->
+<section>
+<h2>5. Serving at runtime: micro self-hosted vs. file://</h2>
+
+<p>How <code>extraFonts/pfodweb-extra-fonts.css</code> and its <code>.woff2</code> files actually get
+loaded depends on how <code>pfodWeb.html</code> itself was opened:</p>
+
+<h3>Micro self-hosted (pfodDevice's own HTTP server)</h3>
+<p>When a pfodDevice serves <code>pfodWeb.html</code> itself (e.g. ESP_PicoW_pfodWebServer), the browser's
+requests for <code>extraFonts/pfodweb-extra-fonts.css</code> and the individual <code>.woff2</code> files
+it references go straight to that same device over ordinary <code>http://</code> — ESP_PicoW_pfodWebServer
+serves them like any other static file it hosts, mapping <code>.woff2</code> → <code>font/woff2</code>,
+<code>.css</code> → <code>text/css</code>, etc., or returning 404 if a file is missing. Nothing about this
+path changed.</p>
+
+<h3>Opened directly via file:// (the common case)</h3>
+<p>Browser security rules don't allow font files to be loaded directly from local disk this way, so when
+<code>pfodWeb.html</code> is opened as a <code>file://</code> page, it instead asks pfodProxy (if running)
+to serve <code>pfodweb-extra-fonts.css</code> and its font files on its behalf. This is automatic — nothing
+to configure — and if pfodProxy isn't running, extra-script text just falls back to the system font, the
+same as if <code>extraFonts/</code> were missing entirely.</p>
+
+<p>pfodProxy validates every such request before serving anything (see
+<a href="pfodProxyInstructions.html#security">pfodProxy's Security section</a> for the full list) and 
+only grants access to pfodWeb's <code>extraFonts/pfodweb-extra-fonts.css</code> and its valid font files.
+If pfodProxy has a password configured (see <a href="pfodProxyInstructions.html#password">Setting a password</a>), these requests 
+are also password protect.</p>
+
+</section>
+
+<!-- ============================================================ -->
+<section>
+<h2>6. Refreshing an existing subset from Google Fonts</h2>
+
+<p><code>pfodWeb_src/fonts/fetch-roboto.js</code> only fetches the two subsets inlined in
+<code>pfodWeb.html</code> (Latin, Latin Extended) by default — Cyrillic, Cyrillic Extended, Greek, and
+Greek Extended are commented out of its <code>KEEP_SUBSETS</code> list, since they no longer need to be
+embedded. To pull a fresh copy of one of the extraFonts subsets:</p>
+
+<ol>
+<li>Uncomment the relevant line(s) in <code>KEEP_SUBSETS</code> near the top of
+<code>fetch-roboto.js</code>.</li>
+<li>Run <code>node pfodWeb_src/fonts/fetch-roboto.js</code>. It writes the new woff2 file(s) into
+<code>pfodWeb_src/fonts/</code> (not <code>extraFonts/</code>).</li>
+<li>Move the resulting file(s) into <code>/extraFonts/</code> by hand, then re-comment the
+line(s) you uncommented in step 1.</li>
+</ol>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+key,value
+gateway_ip,10.x.x.x
+enlighten_system_id,xxxxx
+enlighten_email,email.xxx
+enlighten_password,passwordxzx
+gateway_serial,xxxxxxx
+latitude,-33.87
+longitude,151.2057
+panel_tilt,30
+panel_azimuth,-120
+system_kw,7.6
+posix_timezone,AEST-10AEDT,M10.1.0,M4.1.0/3
+car_charger_ip,10.x.x.x
+hot_water_ip,10.x.x.x
